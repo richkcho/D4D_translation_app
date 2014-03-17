@@ -16,11 +16,20 @@ Database:
 
 Backend Java/Android:
 * Java is chosen as it has to support the (server and the) android (I am hoping for easy transition process)
-* Will pass a Conversation Tree (CT) object to the frontend to use. 
-* Will construct a CT object with the information passed from the frontend and the DB's information
-* May have to talk to a server to ask for CT info in some form, which it uses to construct the CT. 
+* Will pass a Conversation object to the frontend to use. 
+* Will construct a Conversation object with the information passed from the frontend and the DB's information
+	* For now, Conversation has been implemented in a ConversationTree object
+* May have to talk to a server to access the database for information which it uses to construct the Conversation. 
 
 Frontend Android: 
 * Users will choose a conversation tree and the other supported language to translate into
-* Send language choice and conversation ID to backend and receive a CT. 
-* Output responses and interact with the user in receiving his input and traversing the CT
+	* Must ask backend for list of available conversations, will pass a list of supported conversations and languages supported by it
+	* These may be grouped into categories, depending on what topic they are about (not immediate goal)
+	* These will probably end up being SupportedConversation types, which consist of a brief summary/description of conversation, its ID, and a list of supported languages. Then the id and two languages are sent to the bakcend to receive a Conversation object.
+* Output responses and interact with the user in receiving his input and traversing the Conversation
+* Layout:
+	* For initial phase, consider displaying both sides of conversation on the screen at the same time i.e. for En-Es have half of the screen traversing the Conversation in English, half in Spanish, this is a good first step and may help in debugging
+	* Later we can do one at a time and add the rotating/switching graphical effects. 
+	* Screen should start at a menu displaying a list of SupportedConversations with part of description(and possibly supported languages, title, group). WHen a SupportedConversation is opened, full description is showed as well as supported languages, from here select languages and get the conversation
+
+**These are always subject to change**
