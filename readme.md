@@ -37,9 +37,15 @@ Frontend Android:
 **These are always subject to change**
 
 ###Current Progress/Next Goal
-R:
+**R**
 * finished ConversationTree. (Frontend will use Conversation datatype) 
 * Working on extracting tree from database and handling frontend queries into database.
-K:
-J:
-T:
+
+**K**
+* TODO
+
+**J**
+* TODO
+
+**T**
+* TODO
