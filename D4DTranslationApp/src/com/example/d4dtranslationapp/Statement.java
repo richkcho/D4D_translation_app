@@ -23,8 +23,24 @@ public class Statement {
 		return new int[]{l1,l2};
 	}
 	
+	// assuming language numbers are sorted
+	public boolean languageMatch(Statement s)
+	{
+		int[] otherlangs = s.getLanguages();
+		
+		if(otherlangs[0] == l1 && otherlangs[1] == l2)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/* [{language_id} string / {language_id} string]
+	 * this is the way the data will be stored in the database, minus the surrounding brackets and if applicable other language translations
+	 */
 	public String toString()
 	{
-		return "[" + s1 + "/" + s2 + "]";
+		return "[" + l1 + " " + s1 + " / " + l2 + " " + s2 + "]";
 	}
 }

@@ -27,7 +27,7 @@ public class ConversationTreeNode {
 	{
 		for(ConversationTreeNode child : childrenin)
 		{
-			if(!languagesMatch(statement, child.getStatement()))
+			if(!statement.languageMatch(child.getStatement()))
 			{
 				return false;
 			}
@@ -43,7 +43,7 @@ public class ConversationTreeNode {
 	 */
 	public boolean addChild(ConversationTreeNode nodein)
 	{
-		if(languagesMatch(statement, nodein.getStatement()))
+		if(statement.languageMatch(nodein.getStatement()))
 		{
 			children.add(nodein);
 			return true;
@@ -81,18 +81,5 @@ public class ConversationTreeNode {
 		}
 		
 		return res + ")";
-	}
-	
-	private boolean languagesMatch(Statement s1, Statement s2)
-	{
-		int[] langs1 = s1.getLanguages();
-		int[] langs2 = s2.getLanguages();
-		
-		if((langs1[0] == langs2[0] && langs1[0] == langs2[0]) || (langs1[0] == langs2[1] && langs1[1] == langs2[0]))
-		{
-			return true;
-		}
-		
-		return false;
 	}
 }

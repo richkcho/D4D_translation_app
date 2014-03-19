@@ -4,7 +4,7 @@ import java.util.*;
 
 public interface Conversation {
 	
-	/* returns an array of two strings, one for each language used in this conversation
+	/* returns an array of two integers, one for each language used in this conversation. This should be sorted
 	 * returns null if this conversation has no instantiated languages 
 	 */
 	public int[] languages();
@@ -24,8 +24,7 @@ public interface Conversation {
 	 */
 	public String currentStatementString(int language);
 	
-	/* returns conversation tree is string form for specified language
-	 * returns null if invalid language
+	/* returns conversation tree in string form 
 	 */
 	public String toString();
 }
