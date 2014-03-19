@@ -11,8 +11,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Log.d("MainActivity", "dickmunch");
-		ConversationDatabase db = new MyDatabase(this);
+		ConversationDatabase db = new MyDatabase(this); //comment this line out when building frontend, will probably cause crashes
 	}
 
 	@Override

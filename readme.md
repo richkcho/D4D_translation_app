@@ -35,3 +35,11 @@ Frontend Android:
 	* Screen should start at a menu displaying a list of ConversationData with part of description(and possibly supported languages, title, group). When a ConversationData is opened, description is showed as well as supported languages, from here select languages and get the conversation
 
 **These are always subject to change**
+
+###Current Progress/Next Goal
+R:
+* finished ConversationTree. (Frontend will use Conversation datatype) 
+* Working on extracting tree from database and handling frontend queries into database.
+K:
+J:
+T:
