@@ -1,22 +1,46 @@
 package com.example.d4dtranslationapp;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class ConversationTreeNode {
 	
 	private ArrayList<ConversationTreeNode> children;
-	private Statement statement;
+	private ConversationTreeNode parent;
+	private StatementPair statement;
 	
-	public ConversationTreeNode(Statement statementin)
+	public ConversationTreeNode(StatementPair statementpairin)
 	{
-		statement = statementin;
+		parent = null;
+		statement = statementpairin;
 		children = new ArrayList<ConversationTreeNode>();
 	}
 	
-	public ConversationTreeNode(Statement statementin, ArrayList<ConversationTreeNode> childrenin)
+	public ConversationTreeNode(StatementPair statementpairin, ArrayList<ConversationTreeNode> childrenin)
 	{
-		statement = statementin;
+		this(statementpairin);
 		children = childrenin;
+	}
+	
+	public ConversationTreeNode(StatementPair statementpairin, ConversationTreeNode parentin)
+	{
+		this(statementpairin);
+		parent = parentin;
+	}
+	
+	public ConversationTreeNode(StatementPair statementpairin, ConversationTreeNode parentin, ArrayList<ConversationTreeNode> childrenin)
+	{
+		this(statementpairin, childrenin);
+		parent = parentin;
+	}
+	
+	public void setParent(ConversationTreeNode parentin)
+	{
+		parent = parentin;
+	}
+	
+	public ConversationTreeNode getParent()
+	{
+		return parent;
 	}
 	
 	/* Sets the children of this node to be a certain ArrayList of children
@@ -27,7 +51,7 @@ public class ConversationTreeNode {
 	{
 		for(ConversationTreeNode child : childrenin)
 		{
-			if(!statement.languageMatch(child.getStatement()))
+			if(!statement.languageMatch(child.getStatementPair()))
 			{
 				return false;
 			}
@@ -43,7 +67,7 @@ public class ConversationTreeNode {
 	 */
 	public boolean addChild(ConversationTreeNode nodein)
 	{
-		if(statement.languageMatch(nodein.getStatement()))
+		if(statement.languageMatch(nodein.getStatementPair()))
 		{
 			children.add(nodein);
 			return true;
@@ -57,12 +81,12 @@ public class ConversationTreeNode {
 		return children;
 	}
 	
-	public void setStatement(Statement statementin)
+	public void setStatementPair(StatementPair statementpairin)
 	{
-		statement = statementin;
+		statement = statementpairin;
 	}
 	
-	public Statement getStatement()
+	public StatementPair getStatementPair()
 	{
 		return statement;
 	}

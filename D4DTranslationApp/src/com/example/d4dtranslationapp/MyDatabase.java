@@ -18,7 +18,7 @@ public class MyDatabase implements ConversationDatabase {
 	
 	@Override
 	public ArrayList<ConversationData> getConversationData(int category, int[] languages) {
-		// TODO Auto-generated method stub
+		Cursor cdata = database.query("conversation_data", null, "conversation_id=", null, null, null, null);
 		return null;
 	}
 
@@ -40,20 +40,22 @@ public class MyDatabase implements ConversationDatabase {
 	private ConversationTreeNode build(Cursor node, int language1, int language2)
 	{
 		// prepare current node's Statement and create node
-		int translation_id = node.getInt(node.getColumnIndex("conversation_id"));
+		int translation_id = node.getInt(node.getColumnIndex("translation_id"));
 		
-		ConversationTreeNode ctnode = new ConversationTreeNode(getStatement(translation_id, language1, language2)); // TODO
+		ConversationTreeNode ctnode = new ConversationTreeNode(getStatement(translation_id, language1, language2));
 		
 		// prepare cursor with children
 		String[] params = new String[]{""+node.getInt(node.getColumnIndex("conversation_id")), ""+node.getInt(node.getColumnIndex("statement_id"))};
 		Cursor children = database.query("statements", null, "conversation_id=? AND parent_statement_id=?", params, null, null, null);
 		
-		// add all of the children to the node
+		// add all of the children to the node, if they exist, and set parent information
 		if(children.moveToFirst())
 		{
 			for(int temp = 0, max = children.getCount(); temp < max; temp++)
 			{
-				ctnode.addChild(build(children, language1, language2));
+				ConversationTreeNode child = build(children, language1, language2);
+				child.setParent(ctnode);
+				ctnode.addChild(child);
 				children.moveToNext();
 			}
 		}
@@ -64,7 +66,7 @@ public class MyDatabase implements ConversationDatabase {
 	/* Gets info from the translations table in the database
 	 * returns the proper Statement, given languages and translation_id parameters
 	 */
-	private Statement getStatement(int translation_id, int language1, int language2)
+	private StatementPair getStatement(int translation_id, int language1, int language2)
 	{
 		// get all translations associated with translation_id
 		Cursor c = database.query("translations", new String[]{"translation"}, "translation_id="+translation_id, null, null, null, null, "1");
@@ -87,7 +89,7 @@ public class MyDatabase implements ConversationDatabase {
 				}
 			}
 			
-			return new Statement(s1, language1, s2, language2);
+			return new StatementPair(s1, language1, s2, language2);
 		}
 		
 		return null;
@@ -98,8 +100,41 @@ public class MyDatabase implements ConversationDatabase {
 	 */
 	private boolean validConversationParamters(int conversation_id, int language1, int language2)
 	{
-		String[] params = new String[]{"" + conversation_id, Math.min(language1, language2)+","+Math.max(language1, language2)};
-		Cursor root = database.query("conversation_data", new String[]{"conversation_id"}, "conversation_id = ? AND supported_languages=?", params, null, null, null, "1");
-		return root.moveToFirst();
+		Cursor root = database.query("conversation_data", new String[]{"supported_languages"}, "conversation_id="+conversation_id, null, null, null, null, "1");
+		if(root.moveToFirst())
+		{
+			int[] supp_langs = strToIntArray(root.getString(0));
+			return (exists(language1, supp_langs) && exists(language2, supp_langs));
+		}
+		
+		return false;
+	}
+	
+	// if num is in arr, true. false otherwise
+	private boolean exists(int num, int[] arr)
+	{
+		for(int temp : arr)
+		{
+			if(temp == num)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	// turns string of format "int,int,int,...int" into int array
+	private int[] strToIntArray(String str)
+	{
+		String[] temparr = str.split(",");
+		int[] res = new int[temparr.length];
+		
+		for(int temp = 0; temp < res.length; temp++)
+		{
+			res[temp] = Integer.parseInt(temparr[temp]);
+		}
+		
+		return res;
 	}
 }

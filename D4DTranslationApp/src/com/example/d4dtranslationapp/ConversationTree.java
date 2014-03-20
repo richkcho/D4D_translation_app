@@ -10,7 +10,7 @@ public class ConversationTree implements Conversation {
 	public ConversationTree(ConversationTreeNode rootin)
 	{
 		root = rootin;
-		languages = rootin.getStatement().getLanguages();
+		languages = rootin.getStatementPair().getLanguages();
 	}
 	
 	// begin interface methods
@@ -27,7 +27,7 @@ public class ConversationTree implements Conversation {
 			ArrayList<String> resp = new ArrayList<String>();
 			for(ConversationTreeNode node : childnodes)
 			{
-				resp.add(node.getStatement().getTranslation(language));
+				resp.add(node.getStatementPair().getTranslation(language));
 			}
 			
 			return resp;
@@ -48,10 +48,22 @@ public class ConversationTree implements Conversation {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean stepBack()
+	{
+		if(root.getParent() != null)
+		{
+			root = root.getParent();
+			return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public String currentStatementString(int language) {
-		return root.getStatement().getTranslation(language);
+		return root.getStatementPair().getTranslation(language);
 	}
 
 	@Override
