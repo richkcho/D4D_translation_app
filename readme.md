@@ -39,9 +39,10 @@ Frontend Android:
 
 ###Current Progress/Next Goal
 **R**
-* finished ConversationTree. (Frontend will use Conversation datatype) 
+* finished ConversationTree. (Frontend will use Conversation datatype) , ConversationDatabase
 	* Upgraded Conversation, ConversationTree to be doubly linked
-* Working on ~~extracting tree from database~~ Database.getConversation() is completed! and handling frontend queries into database for ConversationData
+	* Changed Statement -> StatementPair and Statement
+* Working on other things at the moment
 
 **K**
 * TODO
