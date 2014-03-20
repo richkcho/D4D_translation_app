@@ -16,7 +16,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 			"CREATE TABLE conversation_data(conversation_id INTEGER PRIMARY KEY,supported_languages TEXT,category INTEGER,description INTEGER);";
 	
 	private static String DELETE_TABLES = 
-			"DROP TABLE IF EXISTS statements, translations, conversation_data";
+			"DROP TABLE IF EXISTS statements, translations, conversation_data;";
 	
 	// test information for the database
 	private static String make_test_info = 
@@ -50,15 +50,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		// trim out make_test_info for production release
-		database.execSQL(CREATE_TABLES);
-		database.execSQL(make_test_info);
+		executeBatchSQL(database, CREATE_TABLES);
+		executeBatchSQL(database, make_test_info);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldversion, int newversion) {
 		Log.w(MyDatabaseHelper.class.getName(), "Upgrading from version" + oldversion + " to " + newversion + ". This will wipe all old data.");
 		database.execSQL(DELETE_TABLES);
-		database.execSQL(CREATE_TABLES);
+		executeBatchSQL(database, CREATE_TABLES);
+	}
+	/* Executes SQL statements in bulk. (buy one get n-1 free)
+	 * Separates the queries by semicolons
+	 */
+	private void executeBatchSQL(SQLiteDatabase database, String sql)
+	{
+		String[] queries = sql.split(";");
+		
+		for(String query : queries)
+		{
+			database.execSQL(query);
+		}
 	}
 
 }

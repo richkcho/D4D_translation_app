@@ -22,6 +22,7 @@ Backend Java/Android:
 * Will construct a Conversation object with the information passed from the frontend and the DB's information
 	* For now, Conversation has been implemented in a ConversationTree object
 * May have to talk to a server to access the database for information which it uses to construct the Conversation. 
+* Passes ConversationData objects to frontend when they ask
 
 Frontend Android: 
 * Users will choose a conversation tree and the other supported language to translate into
@@ -39,7 +40,8 @@ Frontend Android:
 ###Current Progress/Next Goal
 **R**
 * finished ConversationTree. (Frontend will use Conversation datatype) 
-* Working on extracting tree from database and handling frontend queries into database.
+	* Upgraded Conversation, ConversationTree to be doubly linked
+* Working on ~~extracting tree from database~~ Database.getConversation() is completed! and handling frontend queries into database for ConversationData
 
 **K**
 * TODO

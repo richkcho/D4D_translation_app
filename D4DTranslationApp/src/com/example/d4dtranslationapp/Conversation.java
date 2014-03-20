@@ -4,7 +4,7 @@ import java.util.*;
 
 public interface Conversation {
 	
-	/* returns an array of two integers, one for each language used in this conversation. This should be sorted
+	/* returns an array of two strings, one for each language used in this conversation
 	 * returns null if this conversation has no instantiated languages 
 	 */
 	public int[] languages();
@@ -15,16 +15,22 @@ public interface Conversation {
 	public ArrayList<String> responses(int language);
 	
 	/* tells the conversation what choice was made, return true if was successful
-	 * returns false and does nothing if invalid choice
+	 * returns false if invalid choice
 	 */
 	public boolean choose(int choice);
+	
+	/* Undoes a choice. Steps back in the Conversation
+	 * returns true if successful (there was a comment before), false otherwise
+	 */
+	public boolean stepBack();
 	
 	/* returns the current statement in conversation
 	 * returns null if invalid language
 	 */
 	public String currentStatementString(int language);
 	
-	/* returns conversation tree in string form 
+	/* returns conversation tree is string form for specified language
+	 * returns null if invalid language
 	 */
 	public String toString();
 }
