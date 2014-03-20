@@ -19,9 +19,12 @@ public class MainActivity extends Activity {
 		System.out.println(c);
 		c.stepBack();
 		System.out.println(c);
+		
+		System.out.println(db.getConversationData(-1, null));
 		// end R's stuff
 	}
 
+	// test Conversation for debugging purposes
 	public Conversation makeTestConversation()
 	{
 		ConversationTreeNode s1 = new ConversationTreeNode(new StatementPair("Hi",1,"Hola",2));

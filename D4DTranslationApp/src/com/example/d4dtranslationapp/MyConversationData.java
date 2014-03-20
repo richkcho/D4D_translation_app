@@ -7,10 +7,10 @@ public class MyConversationData implements ConversationData{
 	private Statement[] category;
 	private Statement[] description;
 	
-	public MyConversationData(int conversation_idin, String supported_languagesin, String categoryin, String descriptionin)
+	public MyConversationData(int conversation_idin, int[] supported_languagesin, String categoryin, String descriptionin)
 	{
 		conversation_id = conversation_idin;
-		supported_languages = strToIntArray(supported_languagesin);
+		supported_languages = supported_languagesin;
 		category = strToStatementArray(categoryin);
 		description = strToStatementArray(descriptionin);
 		
@@ -66,19 +66,6 @@ public class MyConversationData implements ConversationData{
 		{
 			String stemp = trans[temp];
 			res[temp] = new Statement(stemp.substring(stemp.indexOf(" ")+1), Integer.parseInt(stemp.substring(0, stemp.indexOf(" "))));
-		}
-		
-		return res;
-	}
-	
-	private int[] strToIntArray(String str)
-	{
-		String[] temparr = str.split(",");
-		int[] res = new int[temparr.length];
-		
-		for(int temp = 0; temp < res.length; temp++)
-		{
-			res[temp] = Integer.parseInt(temparr[temp]);
 		}
 		
 		return res;
