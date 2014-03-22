@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 		System.out.println(c);
 		
 		System.out.println(db.getConversationData(-1, null));
+		
+		
 		// end R's stuff
 	}
 

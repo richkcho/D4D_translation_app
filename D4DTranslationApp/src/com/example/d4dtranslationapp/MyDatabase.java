@@ -18,7 +18,7 @@ public class MyDatabase implements ConversationDatabase {
 	
 	@Override
 	public ArrayList<ConversationData> getConversationData(int category, int[] languages) {
-		// fetch rows in database with same category
+		// fetch rows in database with same category, if -1 use wildcard '%'
 		String cat = "'" + (category == -1?"%":""+category) + "'";
 		Cursor cdata = database.query("conversation_data", null, "conversation_id LIKE "+cat, null, null, null, null);
 		ArrayList<ConversationData> res = new ArrayList<ConversationData>();

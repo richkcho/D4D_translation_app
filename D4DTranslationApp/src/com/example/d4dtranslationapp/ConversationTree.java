@@ -4,8 +4,24 @@ import java.util.*;
 
 public class ConversationTree implements Conversation {
 
+	// String that prefaces the languages in toString
+	public static final String languagelabel = "LanguageIDs: ";
+	
+	// String that separates languages from conversations in toString
+	public static final String splitstring = "\n";
+	
+	// String that prefaces the conversation in toString
+	public static final String conversationlabel = "Conversation: ";
+	
 	private ConversationTreeNode root;
 	private int[] languages;
+	
+	public ConversationTree(String conversationstring)
+	{
+		String[] params = conversationstring.split(splitstring);
+		languages = strArrToIntArr(params[0].substring(params[0].indexOf(languagelabel)+languagelabel.length()).split(","));
+		root = new ConversationTreeNode(params[1].substring(params[1].indexOf(conversationlabel)+conversationlabel.length()));
+	}
 	
 	public ConversationTree(ConversationTreeNode rootin)
 	{
@@ -68,7 +84,7 @@ public class ConversationTree implements Conversation {
 
 	@Override
 	public String toString() {
-		return "LanguageIDs: " + languages[0] + "," + languages[1] + "\nConversation: " + root.toString();
+		return languagelabel + languages[0] + "," + languages[1] + splitstring + conversationlabel + root.toString();
 	}
 	// end interface methods
 	
@@ -76,6 +92,17 @@ public class ConversationTree implements Conversation {
 	private boolean validLanguage(int language)
 	{
 		return language == languages[0] || language == languages[1];
+	}
+	
+	private int[] strArrToIntArr(String[] arr)
+	{
+		int[] res = new int[arr.length];
+		for(int temp = 0; temp < res.length; temp++)
+		{
+			res[temp] = Integer.parseInt(arr[temp]);
+		}
+		
+		return res;
 	}
 }
 
