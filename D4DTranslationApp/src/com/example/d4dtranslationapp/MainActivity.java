@@ -15,10 +15,8 @@ public class MainActivity extends Activity {
 		ConversationDatabase db = new MyDatabase(this); 
 		Conversation c = db.getConversation(1, 1, 2);
 		System.out.println(c);
-		c.choose(1);
-		System.out.println(c);
-		c.stepBack();
-		System.out.println(c);
+		
+		System.out.println(db.getConversation(1,1,3));
 		
 		System.out.println(db.getConversationData(-1, null));
 		

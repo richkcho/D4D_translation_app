@@ -10,8 +10,8 @@ public interface ConversationDatabase {
 	 */
 	public ArrayList<ConversationData> getConversationData(int category, int[] languages);
 	
-	/* return Conversation matching specified ID and languages
-	 * return NULL if no such id exists
+	/* return Conversation matching specified ID and languages. 
+	 * return NULL if no such conversation exists that supports both languages
 	 */
 	public Conversation getConversation(int conversation_id, int language1, int language2);
 }

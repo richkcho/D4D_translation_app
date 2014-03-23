@@ -6,7 +6,7 @@ General:
 * This is an app designed to improve communication between tourists and people of the place that is being toured. Most of the time, people need to ask simple things like where is the restroom or does this food have peanuts in it or something of the like, but for some reason cannot rely on Google translate or do not have internet. In this case, our app holds conversation trees of frequently used conversations in multiple languages. 
 * This is intended to connect to a database to get conversation tree information, whether the database be offsite (server) or local (on the android device)
 * Although not optimal for testing or for large databases/database management, will start out with local databases
-* THe interfaces describe how the objects should work
+* The interfaces describe how the objects should work
 
 Database: 
 * Conversations are trees, each node when handed a language parameter will return a comment in specified language
@@ -14,7 +14,7 @@ Database:
 * Hold the conversations in multiple languages, translations of of conversation will be associated and identified via id
 * We will be using adjacency list for the database, as we are only going down a path one step at a time and want DB to be easily modifiable
 * Each node of the tree will reference a table with translations of comment in supported languages
-* Assume entries dealing with languages are sorted by language number
+* Assume entries dealing with languages are sorted by language number (not sure if this is required anymore, but should try to have this)
 
 Backend Java/Android:
 * Java is chosen as it has to support the (server and the) android (I am hoping for easy transition process)
@@ -40,9 +40,10 @@ Frontend Android:
 ###Current Progress/Next Goal
 **R**
 * finished ConversationTree. (Frontend will use Conversation datatype) , ConversationDatabase
-	* Upgraded Conversation, ConversationTree to be doubly linked
+	* Upgraded Conversation, ConversationTree to be doubly linked, and to build itself from its toString
 	* Changed Statement -> StatementPair and Statement
 * Working on other things at the moment
+	* Work on server. PHP seems like a viable choice, so that is what will be started. 
 
 **K**
 * TODO

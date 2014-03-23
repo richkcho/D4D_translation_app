@@ -4,6 +4,9 @@ import java.util.*;
 
 public class ConversationTree implements Conversation {
 
+	// String that separates languages
+	public static final String languagesplit = ",";
+	
 	// String that prefaces the languages in toString
 	public static final String languagelabel = "LanguageIDs: ";
 	
@@ -84,7 +87,7 @@ public class ConversationTree implements Conversation {
 
 	@Override
 	public String toString() {
-		return languagelabel + languages[0] + "," + languages[1] + splitstring + conversationlabel + root.toString();
+		return languagelabel + languages[0] + languagesplit + languages[1] + splitstring + conversationlabel + root.toString();
 	}
 	// end interface methods
 	

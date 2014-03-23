@@ -47,13 +47,20 @@ public class MyDatabase implements ConversationDatabase {
 		return res;
 	}
 
+	// Can return a Conversation with null value in statements if ConversationData is incorrect, this maybe fixed later
 	@Override
 	public Conversation getConversation(int conversation_id, int language1, int language2) {
 		if(validConversationParamters(conversation_id, language1, language2))
 		{
-			Cursor root = database.query("statements", null, "conversation_id = ? AND parent_statement_id=-1", new String[]{""+conversation_id}, null, null, null);
+			Cursor root = database.query("statements", null, "conversation_id="+conversation_id+" AND parent_statement_id=-1", null, null, null, null, "1");
 			root.moveToFirst();
-			return new ConversationTree(build(root, language1, language2));
+			ConversationTreeNode tree = build(root, language1, language2);
+			
+			// return tree only if completed build successfully 
+			if(tree != null)
+			{
+				return new ConversationTree(tree);
+			}
 		}
 		
 		return null;
@@ -66,8 +73,13 @@ public class MyDatabase implements ConversationDatabase {
 	{
 		// prepare current node's Statement and create node
 		int translation_id = node.getInt(node.getColumnIndex("translation_id"));
-		
 		ConversationTreeNode ctnode = new ConversationTreeNode(getStatementPair(translation_id, language1, language2));
+		
+		// if invalid StatementPair, return null
+		if(ctnode.getStatementPair() == null)
+		{
+			return null;
+		}
 		
 		// prepare cursor with children
 		String[] params = new String[]{""+node.getInt(node.getColumnIndex("conversation_id")), ""+node.getInt(node.getColumnIndex("statement_id"))};
@@ -78,7 +90,16 @@ public class MyDatabase implements ConversationDatabase {
 		{
 			for(int temp = 0, max = children.getCount(); temp < max; temp++)
 			{
+				// recurse on child
 				ConversationTreeNode child = build(children, language1, language2);
+				
+				// if invalid child, return null
+				if(child == null)
+				{
+					return null;
+				}
+				
+				// if valid node, set attributes properly
 				child.setParent(ctnode);
 				ctnode.addChild(child);
 				children.moveToNext();
@@ -101,7 +122,7 @@ public class MyDatabase implements ConversationDatabase {
 		{
 			// database entries are structured as: lang_id_1 string_1 / lang_id_2 string_2 / ...
 			String[] trans = c.getString(0).split(" / ");
-			String s1 = "", s2 = "";
+			String s1 = null, s2 = null;
 			for(String stemp : trans)
 			{
 				if(Integer.parseInt(stemp.substring(0, stemp.indexOf(" "))) == language1)
@@ -114,7 +135,15 @@ public class MyDatabase implements ConversationDatabase {
 				}
 			}
 			
-			return new StatementPair(s1, language1, s2, language2);
+			// make sure we got both parts. If we didn't, return null
+			if(s1 != null && s2 != null)
+			{
+				return new StatementPair(s1, language1, s2, language2);
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
 		return null;
@@ -133,7 +162,7 @@ public class MyDatabase implements ConversationDatabase {
 		return null;
 	}
 	
-	/* Given conversation_id and language parameters, checks if it exists in database
+	/* Given conversation_id and language parameters, checks if it exists in conversation_data
 	 * return true if valid combination, false otherwise
 	 */
 	private boolean validConversationParamters(int conversation_id, int language1, int language2)

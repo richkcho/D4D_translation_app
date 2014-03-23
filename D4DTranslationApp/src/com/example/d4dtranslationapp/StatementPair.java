@@ -40,13 +40,12 @@ public class StatementPair {
 	{
 		return new int[]{s1.getLanguage(),s2.getLanguage()};
 	}
-	
-	// assuming language numbers are sorted
+
 	public boolean languageMatch(StatementPair s)
 	{
 		int[] otherlangs = s.getLanguages();
 		
-		if(otherlangs[0] == s1.getLanguage() && otherlangs[1] == s2.getLanguage())
+		if((otherlangs[0] == s1.getLanguage() && otherlangs[1] == s2.getLanguage()) || (otherlangs[0] == s2.getLanguage() && otherlangs[1] == s1.getLanguage()))
 		{
 			return true;
 		}
