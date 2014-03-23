@@ -4,7 +4,7 @@ import android.database.sqlite.*;
 import android.content.*;
 import android.util.*;
 
-public class MyDatabaseHelper extends SQLiteOpenHelper {
+public class LocalDatabaseHelper extends SQLiteOpenHelper {
 
 	private static String DB_NAME = "conversationdatabase";
 	private static int DB_VERSION = 1;
@@ -38,7 +38,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 		
 		
 	
-	public MyDatabaseHelper(Context context)
+	public LocalDatabaseHelper(Context context)
 	{
 		super (context, DB_NAME, null, DB_VERSION);
 	}
@@ -56,7 +56,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldversion, int newversion) {
-		Log.w(MyDatabaseHelper.class.getName(), "Upgrading from version" + oldversion + " to " + newversion + ". This will wipe all old data.");
+		Log.w(LocalDatabaseHelper.class.getName(), "Upgrading from version" + oldversion + " to " + newversion + ". This will wipe all old data.");
 		database.execSQL(DELETE_TABLES);
 		executeBatchSQL(database, CREATE_TABLES);
 	}

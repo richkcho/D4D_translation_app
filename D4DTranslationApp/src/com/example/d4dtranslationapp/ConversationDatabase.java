@@ -2,6 +2,10 @@ package com.example.d4dtranslationapp;
 
 import java.util.*;
 
+/* NOTE: whenever a database is accessed, please do so is a thread outside the main thread
+ * To do this use Async or some other thread-based method. I may write a async/thread wrapper class for ConversationDatabases. 
+ */
+
 public interface ConversationDatabase {
 	
 	/* Given parameters such as category and a language set, return ArrayList of ConversationData that fits input criteria

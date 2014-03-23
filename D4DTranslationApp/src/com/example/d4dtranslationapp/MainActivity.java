@@ -1,26 +1,22 @@
 package com.example.d4dtranslationapp;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// R's stuff, testing
-		ConversationDatabase db = new MyDatabase(this); 
-		Conversation c = db.getConversation(1, 1, 2);
-		System.out.println(c);
+		// R's stuff, testing'
+		System.out.println("Creating HttpClient...");
+		// this needs to be encapsulated as a Task
+		ServerDatabase slolol = new ServerDatabase("http://140.247.71.97/D4D/");
 		
-		System.out.println(db.getConversation(1,1,3));
-		
-		System.out.println(db.getConversationData(-1, null));
-		
-		
+		System.out.println("Stuff gotten from server: " + slolol.getConversation(1, 1, 2));
 		// end R's stuff
 	}
 

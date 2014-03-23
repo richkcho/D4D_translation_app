@@ -15,9 +15,9 @@ Database:
 * We will be using adjacency list for the database, as we are only going down a path one step at a time and want DB to be easily modifiable
 * Each node of the tree will reference a table with translations of comment in supported languages
 * Assume entries dealing with languages are sorted by language number (not sure if this is required anymore, but should try to have this)
+* **IMPORTANT:** when accessing database assume it will take several seconds; use a background thread. 
 
 Backend Java/Android:
-* Java is chosen as it has to support the (server and the) android (I am hoping for easy transition process)
 * Will pass a Conversation object to the frontend to use. 
 * Will construct a Conversation object with the information passed from the frontend and the DB's information
 	* For now, Conversation has been implemented in a ConversationTree object

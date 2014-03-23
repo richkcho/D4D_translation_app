@@ -5,14 +5,14 @@ import android.database.*;
 import android.database.sqlite.*;
 import android.content.*;
 
-public class MyDatabase implements ConversationDatabase {
+public class LocalDatabase implements ConversationDatabase {
 
-	private MyDatabaseHelper dbhelper;
+	private LocalDatabaseHelper dbhelper;
 	private SQLiteDatabase database;
 	
-	public MyDatabase(Context context)
+	public LocalDatabase(Context context)
 	{
-		dbhelper = new MyDatabaseHelper(context);
+		dbhelper = new LocalDatabaseHelper(context);
 		database = dbhelper.getReadableDatabase();
 	}
 	
