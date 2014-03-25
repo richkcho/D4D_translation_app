@@ -14,9 +14,12 @@ public class MainActivity extends Activity {
 		// R's stuff, testing'
 		System.out.println("Creating HttpClient...");
 		// this needs to be encapsulated as a Task
-		ServerDatabase slolol = new ServerDatabase("http://140.247.71.97/D4D/");
+		// ServerDatabase slolol = new ServerDatabase("http://140.247.71.97/D4D/");
+		ConversationDatabase whee = new LocalDatabase(this);
+		System.out.println(whee.getConversationData(-1, null));
+		System.out.println(new MyConversationData(whee.getConversationData(-1, null).toString()));
 		
-		System.out.println("Stuff gotten from server: " + slolol.getConversation(1, 1, 2));
+		// System.out.println("Stuff gotten from server: " + slolol.getConversation(1, 1, 2));
 		// end R's stuff
 	}
 

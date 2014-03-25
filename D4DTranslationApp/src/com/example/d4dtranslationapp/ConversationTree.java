@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ConversationTree implements Conversation {
 
-	// String that separates languages
+	// String that separates languages in toString
 	public static final String languagesplit = ",";
 	
 	// String that prefaces the languages in toString
@@ -22,7 +22,7 @@ public class ConversationTree implements Conversation {
 	public ConversationTree(String conversationstring)
 	{
 		String[] params = conversationstring.split(splitstring);
-		languages = strArrToIntArr(params[0].substring(params[0].indexOf(languagelabel)+languagelabel.length()).split(","));
+		languages = strArrToIntArr(params[0].substring(params[0].indexOf(languagelabel)+languagelabel.length()).split(languagesplit));
 		root = new ConversationTreeNode(params[1].substring(params[1].indexOf(conversationlabel)+conversationlabel.length()));
 	}
 	
