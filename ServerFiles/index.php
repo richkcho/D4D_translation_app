@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html>
-<body>
-
 <?php
 // Strings
+$conversationdata_conversationidlabel = 'ConversationID: ';
+$conversationdata_languagelabel = 'LanguageIDs: ';
+$conversationdata_categorylabel = 'Category: ';
+$conversationdata_descriptionlabel = 'Description: ';
+$conversationdata_splitstring = "\n";
+
 $conversationtree_languagelabel = 'LanguageIDs: ';
 $conversationtree_conversationlabel = 'Conversation: ';
 $conversationtree_split = "\n";
@@ -20,7 +22,53 @@ $statementpair_post = ']';
 
 $statement_split = ' ';
 
+$arraylist_split = ', ';
+
 // functions
+
+// complies to interface. expects supported_languages to be comma seperated integers
+function getConversationData($db, $category_id, $supported_languages)
+{
+	global $arraylist_split, 
+		$conversationdata_conversationidlabel,
+		$conversationdata_languagelabel,
+		$conversationdata_categorylabel, 
+		$conversationdata_descriptionlabel, 
+		$conversationdata_splitstring;
+	// ensure category_id is integer
+	$category_id = (int)$category_id;
+	
+	$langarr = strToIntArr($supported_languages);
+	
+	// fetch rows in database with same category, if -1 use wildcard '%'
+	$catid = ($category_id == -1 ? "'%'" : "'$category_id'");
+	$resultset = $db->query("SELECT * FROM conversation_data WHERE category LIKE $catid");
+	
+	$res = '[';
+	
+	for($temp = 0; $temp < $resultset->num_rows; $temp++)
+	{
+		$result = $resultset->fetch_array();
+		
+		if($supported_languages != '' && issubset($langarr, strToIntArr($result['supported_languages'])))
+		{
+			// add the separator
+			if($temp > 0)
+			{
+				$res .= $arraylist_split;
+			}
+			
+			// add the statement
+			$res .= $conversationdata_conversationidlabel . $result['conversation_id'] . $conversationdata_splitstring;
+			$res .= $conversationdata_languagelabel . $result['supported_languages'] . $conversationdata_splitstring;
+			$res .= $conversationdata_categorylabel . $result['category'] . $conversationdata_splitstring;
+			$res .= $conversationdata_descriptionlabel . $result['description'];
+			
+		}
+	}
+	
+	return $res . ']';
+}
 
 // given conversation_id and languages, returns string form of a conversation
 function getConversation($db, $conversation_id, $language1, $language2)
@@ -37,7 +85,7 @@ function getConversation($db, $conversation_id, $language1, $language2)
 	if(validConversationParameters($db, $conversation_id, $language1, $language2))
 	{
 		$resultset = $db->query("SELECT * FROM statements WHERE conversation_id=$conversation_id AND parent_statement_id=-1 LIMIT 1");
-		$conversationstring .= $conversationtree_conversationlabel . build($db, mysqli_fetch_array($resultset), $language1, $language2);
+		$conversationstring .= $conversationtree_conversationlabel . build($db, $resultset->fetch_array(), $language1, $language2);
 		
 		if($conversationstring != NULL)
 		{
@@ -64,19 +112,16 @@ function build($db, $row, $language1, $language2)
 	
 	$children = $db->query('SELECT * FROM statements WHERE conversation_id='. $row['conversation_id'] . ' AND parent_statement_id=' . $row['statement_id']);
 	
-	if(($numchildren = $children->num_rows) != 0)
+	for($temp = 0; $temp < $children->num_rows; $temp++)
 	{
-		for($temp = 0; $temp < $numchildren; $temp++)
+		$child = build($db, $children->fetch_array(), $language1, $language2);
+		
+		if($child == NULL)
 		{
-			$child = build($db, $children->fetch_array(), $language1, $language2);
-			
-			if($child == NULL)
-			{
-				return NULL;
-			}
-			
-			$res .= $conversationtreenode_split . $child;
+			return NULL;
 		}
+		
+		$res .= $conversationtreenode_split . $child;
 	}
 	
 	return $res . $conversationtreenode_post;
@@ -87,13 +132,11 @@ function build($db, $row, $language1, $language2)
 */
 function getStatementPair($db, $translation_id, $language1, $language2)
 {
+	global $statementpair_pre, $statementpair_post, $statementpair_split, $statement_split;
 	// make sure inputs are integers
 	$translation_id = (int)$translation_id;
 	$language1 = (int)$language1;
 	$language2 = (int)$language2;
-
-	// get global variables
-	global $statementpair_pre, $statementpair_post, $statementpair_split, $statement_split;
 
 	// fetch row from database
 	$row = mysqli_query($db, "SELECT translation FROM translations WHERE translation_id=$translation_id LIMIT 1");
@@ -132,9 +175,18 @@ function getStatementPair($db, $translation_id, $language1, $language2)
 	}
 }
 
+function getTranslationString($db, $translation_id)
+{
+	$res = $db->query("SELECT translation FROM translations WHERE translation_id=$translation_id LIMIT 1");
+	
+	if($res->num_rows == 1)
+	{
+		return $res->fetch_array()['translation'];
+	}
+}
+
 function validConversationParameters($db, $conversation_id, $language1, $language2)
 {
-	// get global variables
 	global $language_split;
 	
 	$row = mysqli_query($db, "SELECT supported_languages FROM conversation_data WHERE conversation_id=$conversation_id LIMIT 1");
@@ -148,6 +200,34 @@ function validConversationParameters($db, $conversation_id, $language1, $languag
 	return (exists($language1, $languages) && exists($language2, $languages));
 }
 
+// tests if these variables exist in $_POST
+function allset($params)
+{
+	foreach($params as $temp)
+	{
+		if(!isset($_POST[$temp]))
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+function issubset($set, $supset)
+{
+	foreach($set as $elem)
+	{
+		if(!exists($elem, $supset))
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+// tests it $elem is in set $arr
 function exists($elem, $arr)
 {
 	foreach($arr as $temp)
@@ -161,8 +241,23 @@ function exists($elem, $arr)
 	return false;
 }
 
+// breaks the language string returned from the database into an array of integers
+function strToIntArr($str)
+{
+	global $language_split;
+	
+	$arr = explode($language_split, $str);
+	
+	for($temp = 0, $length = count($arr); $temp < $length; $temp++)
+	{
+		$arr[$temp] = (int)$arr[$temp];
+	}
+	
+	return $arr;
+}
+
 // main script
-if($_SERVER['REQUEST_METHOD'] == 'POST' || true)
+if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	// filename of file that contains connection info
 	$filename = 'dbconnect.txt';	
@@ -195,12 +290,45 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' || true)
 			else
 			{
 				// now actually do stuff
-				echo 'Successfully connected to database';
-				echo '<br />';
-				echo getConversation($db, 1, 1, 2);
+				if(isset($_POST['method_name']))
+				{
+					if($_POST['method_name'] == 'getConversation')
+					{
+						$paramNames = array('conversation_id', 'language1', 'language2');
+						if(allset($paramNames))
+						{
+							$res = getConversation($db, $_POST[$paramNames[0]], $_POST[$paramNames[1]], $_POST[$paramNames[2]]);
+							if($res != NULL)
+							{
+								echo $res;
+							}
+							else
+							{
+								echo 'NULL';
+							}
+						}
+					}
+					elseif($_POST['method_name'] == 'getConversationData')
+					{
+						$paramNames = array('category_id', 'supported_languages');
+						if(allset($paramNames))
+						{
+							$res = getConversationData($db, $_POST[$paramNames[0]], $_POST[$paramNames[1]]);
+							
+							if($res != '[]')
+							{
+								echo $res;
+							}
+							else
+							{
+								echo 'NULL';
+							}
+						}
+					}
+				}
 
 				// close the database connection
-				mysqli_close($db); 
+				$db->close(); 
 			}
 		}
 		else
@@ -215,7 +343,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' || true)
 		echo "Database connection file $filename  not found\n";
 	}
 }
+else
+{
+	$filename = 'dbconnect.txt';
+	$connectfile = fopen($filename, 'r');
+	$connectinfo = array();
+	while(!feof($connectfile))
+	{
+		$connectinfo[] = rtrim(fgets($connectfile));
+	}
+	$db =  mysqli_connect("localhost", $connectinfo[0], $connectinfo[1], $connectinfo[2]);
+	
+	echo print_r(explode("asd", ""), true);
+	echo '<br />';
+	echo print_r(strToIntArr("WOLOLOL, 2"), true);
+	echo '<br />';
+	echo getConversation($db, 1, 1, 2);
+	echo '<br />';
+	echo getConversationData($db, -1, '1');
+}
 ?>
-
-</body>
-</html>

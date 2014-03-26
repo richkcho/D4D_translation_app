@@ -17,7 +17,7 @@ public class LocalDatabase implements ConversationDatabase {
 	}
 	
 	@Override
-	public ArrayList<ConversationData> getConversationData(int category, int[] languages) {
+	public ArrayList<ConversationData> getConversationData(int category, int[] supported_languages) {
 		// fetch rows in database with same category, if -1 use wildcard '%'
 		String cat = "'" + (category == -1?"%":""+category) + "'";
 		Cursor cdata = database.query("conversation_data", null, "conversation_id LIKE "+cat, null, null, null, null);
@@ -31,7 +31,7 @@ public class LocalDatabase implements ConversationDatabase {
 				int[] supported_languagesin = strToIntArray(cdata.getString(cdata.getColumnIndex("supported_languages")));
 				
 				// if languages = null, accept anything. else make sure
-				if(languages == null || existsArr(supported_languagesin, languages))
+				if(supported_languages == null || existsArr(supported_languagesin, supported_languages))
 				{
 					int conversation_idin = cdata.getInt(cdata.getColumnIndex("conversation_id"));
 					String categoryin = getTranslationString(cdata.getInt(cdata.getColumnIndex("category")));

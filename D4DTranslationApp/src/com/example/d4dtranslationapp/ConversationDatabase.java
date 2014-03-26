@@ -12,7 +12,7 @@ public interface ConversationDatabase {
 	 * -1 for category is wildcard, null for languages is wildcard. Needs a valid user_language though. 
 	 * returns empty ArrayList if no such conversations match data
 	 */
-	public ArrayList<ConversationData> getConversationData(int category, int[] languages);
+	public ArrayList<ConversationData> getConversationData(int category, int[] supported_languages);
 	
 	/* return Conversation matching specified ID and languages. 
 	 * return NULL if no such conversation exists that supports both languages

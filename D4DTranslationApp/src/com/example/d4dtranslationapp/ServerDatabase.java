@@ -18,7 +18,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class ServerDatabase implements ConversationDatabase{
 
-	// Server ip address
+	// Server IP address or whatever URL used to connect to it
 	private String url;
 	private String USER_AGENT = "spaceduck";
 	private HttpClient client;
@@ -32,8 +32,7 @@ public class ServerDatabase implements ConversationDatabase{
 	
 
 	@Override
-	public ArrayList<ConversationData> getConversationData(int category,
-			int[] languages) {
+	public ArrayList<ConversationData> getConversationData(int category, int[] languages) {
 		// TODO Auto-generated method stub
 		return null;
 	}
