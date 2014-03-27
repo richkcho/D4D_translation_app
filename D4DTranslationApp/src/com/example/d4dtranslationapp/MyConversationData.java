@@ -2,6 +2,10 @@ package com.example.d4dtranslationapp;
 
 public class MyConversationData implements ConversationData{
 	
+	public static final String pre = "(";
+	
+	public static final String post = ")";
+	
 	// String that prefaces the conversation_id in toString
 	public static final String conversationidlabel = "ConversationID: ";
 	
@@ -39,7 +43,7 @@ public class MyConversationData implements ConversationData{
 	
 	public MyConversationData(String conversationdata)
 	{
-		String[] params = conversationdata.split(splitstring);
+		String[] params = conversationdata.substring(1, conversationdata.length()-1).split(splitstring);
 		
 		conversation_id  = Integer.parseInt(trimLabel(params[0], conversationidlabel));
 		supported_languages = strArrToIntArr(trimLabel(params[1], languagelabel).split(languagesplit));
@@ -85,10 +89,10 @@ public class MyConversationData implements ConversationData{
 	
 	public String toString()
 	{
-		return conversationidlabel + conversation_id + splitstring + 
+		return pre + conversationidlabel + conversation_id + splitstring + 
 				languagelabel + intArrToString(supported_languages) + splitstring +
 				categorylabel + statementArrToString(category) + splitstring + 
-				descriptionlabel + statementArrToString(description);
+				descriptionlabel + statementArrToString(description) + post;
 	}
 	
 	private String trimLabel(String str, String label)

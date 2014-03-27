@@ -32,7 +32,7 @@ public class ConversationTreeNode {
 		{
 			while(params[1].length() != 0)
 			{
-				int[] bounds = findNextConversationTreeNode(params[1], 0);
+				int[] bounds = findNextBalancedParenPair(params[1], 0);
 				this.addChild(new ConversationTreeNode(params[1].substring(bounds[0], bounds[1]+1)));
 				params[1] = params[1].substring(bounds[1]+1);
 			}
@@ -144,7 +144,7 @@ public class ConversationTreeNode {
 	/* given a string and a starting index, returns an integer pair with the locations of the next set of balanced parenthesis 
 	 * returns null if no such balanced parenthesis can be found
 	 */
-	private int[] findNextConversationTreeNode(String str, int startindex)
+	private int[] findNextBalancedParenPair(String str, int startindex)
 	{
 		int nesting = 0;
 		int[] res = new int[2];

@@ -12,7 +12,7 @@ $conversationtree_split = "\n";
 
 $language_split = ',';
 
-$conversationtreenode_split = ',';
+$conversationtreenode_split = '::';
 $conversationtreenode_pre = '(';
 $conversationtreenode_post = ')';
 
@@ -59,10 +59,10 @@ function getConversationData($db, $category_id, $supported_languages)
 			}
 			
 			// add the statement
-			$res .= $conversationdata_conversationidlabel . $result['conversation_id'] . $conversationdata_splitstring;
+			$res .= '(' . $conversationdata_conversationidlabel . $result['conversation_id'] . $conversationdata_splitstring;
 			$res .= $conversationdata_languagelabel . $result['supported_languages'] . $conversationdata_splitstring;
-			$res .= $conversationdata_categorylabel . $result['category'] . $conversationdata_splitstring;
-			$res .= $conversationdata_descriptionlabel . $result['description'];
+			$res .= $conversationdata_categorylabel . getTranslationString($db, $result['category']) . $conversationdata_splitstring;
+			$res .= $conversationdata_descriptionlabel . getTranslationString($db, $result['description']) . ')';
 			
 		}
 	}

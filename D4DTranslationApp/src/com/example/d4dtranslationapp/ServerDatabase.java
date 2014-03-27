@@ -18,6 +18,9 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class ServerDatabase implements ConversationDatabase{
 
+	public static final char pre = '(';
+	public static final char post = ')';
+	
 	// Server IP address or whatever URL used to connect to it
 	private String url;
 	private String USER_AGENT = "spaceduck";
@@ -32,9 +35,65 @@ public class ServerDatabase implements ConversationDatabase{
 	
 
 	@Override
-	public ArrayList<ConversationData> getConversationData(int category, int[] languages) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<ConversationData> getConversationData(int conversation_id, int[] languages)
+	{
+		ArrayList<ConversationData> arr = new ArrayList<ConversationData>();
+		HttpPost post = new HttpPost(url);
+		
+		post.setHeader("USER-Agent", USER_AGENT);
+		
+		// make and set POST params
+		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+		params.add(new BasicNameValuePair("method_name", "getConversationData"));
+		params.add(new BasicNameValuePair("category_id", Integer.toString(conversation_id)));
+		params.add(new BasicNameValuePair("supported_languages", intArrToString(languages)));
+		
+		try {
+			post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		// execute post request and get response
+		try {
+			HttpResponse response = client.execute(post);
+			System.out.println("Asking server at "+url+" Response Code: " + response.getStatusLine().getStatusCode());
+			
+			BufferedReader read = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			
+			String res = "";
+			String temp = "";
+			while((temp = read.readLine()) != null)
+			{
+				res += temp + "\n";
+			}
+			
+			// process string and add ConversationData objects to arraylist
+			int index = 0;
+			while(index < res.length())
+			{
+				int[] bounds = findNextBalancedParenPair(res, index);
+				if(bounds != null)
+				{
+					arr.add(new MyConversationData(res.substring(bounds[0], bounds[1]+1)));
+					index = bounds[1]+1;
+				}
+				else
+				{
+					break;
+				}
+			}
+			
+			return arr;
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Conversation getConversation(int conversation_id, int language1, int language2) {
@@ -79,6 +138,54 @@ public class ServerDatabase implements ConversationDatabase{
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	// helper functions
+	
+	private String intArrToString(int[] arr)
+	{
+		String res = "";
+		for(int temp : arr)
+		{
+			res += temp;
+		}
+		
+		return res.substring(0, res.length() - 1);
+	}
+	
+	/* given a string and a starting index, returns an integer pair with the locations of the next set of balanced parenthesis 
+	 * returns null if no such balanced parenthesis can be found
+	 */
+	private int[] findNextBalancedParenPair(String str, int startindex)
+	{
+		int nesting = 0;
+		int[] res = new int[2];
+		for(int temp = startindex; temp < str.length(); temp++)
+		{
+			char c = str.charAt(temp);
+			
+			if(c == pre)
+			{
+				if(nesting == 0)
+				{
+					res[0] = temp;
+				}
+				
+				nesting++;
+			}
+			else if(c == post)
+			{
+				nesting--;
+				
+				if(nesting == 0)
+				{
+					res[1] = temp;
+					return res;
+				}
+			}
+		}
+		
+		return null;
 	}
 
 }
