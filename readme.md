@@ -43,7 +43,8 @@ Frontend Android:
 	* Upgraded Conversation, ConversationTree to be doubly linked, and to build itself from its toString
 	* Changed Statement -> StatementPair and Statement
 * Working on other things at the moment
-	* Work on server. PHP seems like a viable choice, so that is what will be started. 
+	* Work on server. PHP seems like a viable choice, so that is what will be started. **FINISHED**
+* Shall begin work on frontend
 
 **K**
 * TODO

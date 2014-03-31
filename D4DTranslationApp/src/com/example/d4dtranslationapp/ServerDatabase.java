@@ -21,6 +21,9 @@ public class ServerDatabase implements ConversationDatabase{
 	public static final char pre = '(';
 	public static final char post = ')';
 	
+	// String sent back from server meaning no data
+	public static final String nodata = "NULL";
+	
 	// Server IP address or whatever URL used to connect to it
 	private String url;
 	private String USER_AGENT = "spaceduck";
@@ -67,6 +70,13 @@ public class ServerDatabase implements ConversationDatabase{
 			while((temp = read.readLine()) != null)
 			{
 				res += temp + "\n";
+			}
+			res = res.substring(0, res.length() - 1);
+			
+			// if no data was received we can just return now
+			if(res.equals(nodata))
+			{
+				return arr;
 			}
 			
 			// process string and add ConversationData objects to arraylist
@@ -130,7 +140,8 @@ public class ServerDatabase implements ConversationDatabase{
 				res += temp;
 			}
 			
-			return new ConversationTree(res);
+			// return null if no data was received, else return what we got
+			return (res.equals(nodata) ? null : new ConversationTree(res));
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return null;
