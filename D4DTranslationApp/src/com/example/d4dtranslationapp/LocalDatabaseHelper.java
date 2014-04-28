@@ -16,7 +16,7 @@ public class LocalDatabaseHelper extends SQLiteOpenHelper {
 			"CREATE TABLE conversation_data(conversation_id INTEGER PRIMARY KEY,supported_languages TEXT,category INTEGER,description INTEGER);";
 	
 	private static String DELETE_TABLES = 
-			"DROP TABLE IF EXISTS statements, translations, conversation_data;";
+			"DROP TABLE IF EXISTS statements, translations, conversation_data, languages;";
 	
 	// test information for the database
 	private static String make_test_info = 

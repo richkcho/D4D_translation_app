@@ -35,6 +35,7 @@ Frontend Android:
 	* Later we can do one at a time and add the rotating/switching graphical effects. 
 	* Screen should start at a menu displaying a list of ConversationData with part of description(and possibly supported languages, title, group). When a ConversationData is opened, description is showed as well as supported languages, from here select languages and get the conversation
 
+
 **These are always subject to change**
 
 ###Current Progress/Next Goal
@@ -45,12 +46,3 @@ Frontend Android:
 * Working on other things at the moment
 	* Work on server. PHP seems like a viable choice, so that is what will be started. **FINISHED**
 * Shall begin work on frontend
-
-**K**
-* TODO
-
-**J**
-* TODO
-
-**T**
-* TODO
