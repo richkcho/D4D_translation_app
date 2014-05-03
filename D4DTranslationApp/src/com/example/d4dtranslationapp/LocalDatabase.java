@@ -17,22 +17,26 @@ public class LocalDatabase implements ConversationDatabase {
 	}
 	
 	@Override
-	public ArrayList<ConversationData> getConversationData(int category, int[] supported_languages) {
+	public ArrayList<ConversationData> getConversationData(int category, int[] supported_languagesin) {
 		// fetch rows in database with same category, if -1 use wildcard '%'
 		String cat = "'" + (category == -1?"%":""+category) + "'";
-		Cursor cdata = database.query("conversation_data", null, "conversation_id LIKE "+cat, null, null, null, null);
+		Cursor cdata = database.query("conversation_data", null, "category LIKE "+cat, null, null, null, null);
 		ArrayList<ConversationData> res = new ArrayList<ConversationData>();
 		
 		if(cdata.moveToFirst())
 		{
+			System.out.println("Non-empty SQL result found");
 			while(!cdata.isAfterLast())
 			{
 				// prepare data
-				int[] supported_languagesin = strToIntArray(cdata.getString(cdata.getColumnIndex("supported_languages")));
+				int[] supported_languages = strToIntArray(cdata.getString(cdata.getColumnIndex("supported_languages")));
+				
+				System.out.println("HURR");
 				
 				// if languages = null, accept anything. else make sure
-				if(supported_languages == null || existsArr(supported_languagesin, supported_languages))
+				if(supported_languagesin == null || existsArr(supported_languagesin, supported_languages))
 				{
+					System.out.println("Passed Language Check");
 					int conversation_idin = cdata.getInt(cdata.getColumnIndex("conversation_id"));
 					int catidin = cdata.getInt(cdata.getColumnIndex("category"));
 					String categoryin = getTranslationString(catidin);

@@ -12,6 +12,11 @@ public interface ConversationData {
 	 */
 	public int[] getSupportedLanguages();
 	
+	/* Gets the id of the category
+	 * this is used in database lookups
+	 */
+	public int getCategoryID();
+	
 	/* Gets the string form of category translated into specified language
 	 * returns null if invalid language
 	 */

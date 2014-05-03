@@ -1,10 +1,8 @@
 package com.example.d4dtranslationapp;
 
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -12,15 +10,22 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
+	public final static String CATEGORY_ID = "com.example.d4dtranslationapp.CATID";
+	
 	// variables for load and output of conversation data
-	ListView listView;
+	protected ListView listView;
 	protected ProgressDialog progress;
-	protected ArrayList<String> values = new ArrayList<String>();
+	protected ArrayList<String> listvalues = new ArrayList<String>();
+	protected ArrayList<Integer> catids = new ArrayList<Integer>();
 	protected ArrayAdapter<String> adapter;
 	protected ConversationDatabase db;
 	
@@ -67,21 +72,23 @@ public class MainActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			
-			for(int temp = 0; temp < 9999; temp++)
+			for(int temp = 0; temp < 999; temp++)
 			{
 				publishProgress();
 			}
 
 			if(db != null)
 			{
-				values.add(getResources().getStringArray(R.array.all_translation_array)[userlang]);
+				listvalues.add(getResources().getStringArray(R.array.all_translation_array)[userlang]);
+				catids.add(-1);
 				
-				System.out.println(db.getConversationData(-1,cparams));
+				System.out.println("ConversationData List: " + db.getConversationData(-1,new int[]{1,2}));
 				for(ConversationData temp : db.getConversationData(-1, cparams))
 				{
-					if(!values.contains(temp))
+					if(!listvalues.contains(temp))
 					{
-						values.add(temp.getCategoryString(userlang));
+						listvalues.add(temp.getCategoryString(userlang));
+						catids.add(temp.getCategoryID());
 					}
 				}
 			}
@@ -97,7 +104,7 @@ public class MainActivity extends Activity {
 				adapter.notifyDataSetChanged();
 			}
 
-			progress.hide();
+			progress.dismiss();
 		}
 
 	}
@@ -119,12 +126,12 @@ public class MainActivity extends Activity {
 		
 		// "fetch" data
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		System.out.println(pref.getString("user_language", "-1"));
+		System.out.println("User Language: " + pref.getString("user_language", "-1"));
+		System.out.println("Target Language: " + pref.getString("target_language", "-1"));
 		
 		new GetDataTask(pref.getString("user_language", "1"), pref.getString("target_language", "2")).execute(null, null, null);
 
-		System.out.println(values);
-		System.out.println(db.getConversation(1,1,2));
+		System.out.println("ListValues: " + listvalues);
 		
 		// Get ListView object from xml
 		listView = (ListView) findViewById(R.id.list);
@@ -136,11 +143,26 @@ public class MainActivity extends Activity {
 		// Forth - the Array of data
 
 		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1, values);
+				android.R.layout.simple_list_item_1, android.R.id.text1, listvalues);
 
 
 		// Assign adapter to ListView
 		listView.setAdapter(adapter); 
+		
+		// Assign an onClick listener
+		 listView.setOnItemClickListener(new OnItemClickListener() {
+			 
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view,
+                int position, long id) {
+
+               Intent intent = new Intent(MainActivity.this, ConversationDataListActivity.class); // provide intent context and class to deliver intent to
+               intent.putExtra(CATEGORY_ID, catids.get(position));
+               startActivity(intent);
+            
+             }
+
+        }); 
 		
 		// R's stuff, testing'
 		// System.out.println("Creating HttpClient...");
