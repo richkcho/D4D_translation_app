@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="16"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,6 +27,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.d4dtranslationapp.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.example.d4dtranslationapp.MainActivity" >
+        </activity>
+        <activity
+            android:name="com.example.d4dtranslationapp.ConversationDataListActivity"
+            android:label="@string/title_activity_conversation_data_list"
+            android:parentActivityName="com.example.d4dtranslationapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.d4dtranslationapp.MainActivity" />
         </activity>
     </application>
 

@@ -9,6 +9,9 @@ public class MyConversationData implements ConversationData{
 	// String that prefaces the conversation_id in toString
 	public static final String conversationidlabel = "ConversationID: ";
 	
+	// String that prefaces the category_id in toString
+	public static final String categoryidlabel = "CategoryID: ";
+	
 	// String that separates languages
 	public static final String languagesplit = ",";
 	
@@ -28,14 +31,16 @@ public class MyConversationData implements ConversationData{
 	public static final String descriptionlabel = "Description: ";
 
 	private int conversation_id;
+	private int category_id;
 	private int[] supported_languages;
 	private Statement[] category;
 	private Statement[] description;
 	
-	public MyConversationData(int conversation_idin, int[] supported_languagesin, String categoryin, String descriptionin)
+	public MyConversationData(int conversation_idin, int[] supported_languagesin, int catidin, String categoryin, String descriptionin)
 	{
 		conversation_id = conversation_idin;
 		supported_languages = supported_languagesin;
+		category_id = catidin;
 		category = strToStatementArray(categoryin);
 		description = strToStatementArray(descriptionin);
 		
@@ -47,13 +52,19 @@ public class MyConversationData implements ConversationData{
 		
 		conversation_id  = Integer.parseInt(trimLabel(params[0], conversationidlabel));
 		supported_languages = strArrToIntArr(trimLabel(params[1], languagelabel).split(languagesplit));
-		category = strToStatementArray(trimLabel(params[2], categorylabel));
-		description = strToStatementArray(trimLabel(params[3], descriptionlabel));
+		conversation_id = Integer.parseInt(trimLabel(params[2], categoryidlabel));
+		category = strToStatementArray(trimLabel(params[3], categorylabel));
+		description = strToStatementArray(trimLabel(params[4], descriptionlabel));
 	}
 	
 	public int getConversationID()
 	{
 		return conversation_id;
+	}
+	
+	public int getCategoryID()
+	{
+		return category_id;
 	}
 	
 	public int[] getSupportedLanguages()
@@ -91,6 +102,7 @@ public class MyConversationData implements ConversationData{
 	{
 		return pre + conversationidlabel + conversation_id + splitstring + 
 				languagelabel + intArrToString(supported_languages) + splitstring +
+				categoryidlabel + category_id + splitstring +
 				categorylabel + statementArrToString(category) + splitstring + 
 				descriptionlabel + statementArrToString(description) + post;
 	}

@@ -1,7 +1,9 @@
 package com.example.d4dtranslationapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 
@@ -12,7 +14,7 @@ public class LoadingScreenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.activity_loading_screen);
 		/** set time to splash out */
 		final int welcomeScreenDisplay = 3000;
@@ -20,7 +22,6 @@ public class LoadingScreenActivity extends Activity {
 		Thread welcomeThread = new Thread() {
 
 			int wait = 0;
-
 			@Override
 			public void run() {
 				try {
@@ -33,6 +34,8 @@ public class LoadingScreenActivity extends Activity {
 						sleep(100);
 						wait += 100;
 					}
+
+
 				} catch (Exception e) {
 					System.out.println("EX: " + e);
 				} finally {
@@ -40,6 +43,7 @@ public class LoadingScreenActivity extends Activity {
 					 * Called after splash times up. Do some action after splash
 					 * times up. Here we moved to another main activity class
 					 */
+					
 					startActivity(new Intent(LoadingScreenActivity.this,
 							MainActivity.class));
 					finish();

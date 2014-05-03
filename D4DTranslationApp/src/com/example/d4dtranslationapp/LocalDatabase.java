@@ -34,9 +34,10 @@ public class LocalDatabase implements ConversationDatabase {
 				if(supported_languages == null || existsArr(supported_languagesin, supported_languages))
 				{
 					int conversation_idin = cdata.getInt(cdata.getColumnIndex("conversation_id"));
-					String categoryin = getTranslationString(cdata.getInt(cdata.getColumnIndex("category")));
+					int catidin = cdata.getInt(cdata.getColumnIndex("category"));
+					String categoryin = getTranslationString(catidin);
 					String descriptionin = getTranslationString(cdata.getInt(cdata.getColumnIndex("description")));
-					res.add(new MyConversationData(conversation_idin, supported_languagesin, categoryin, descriptionin));
+					res.add(new MyConversationData(conversation_idin, supported_languagesin, catidin, categoryin, descriptionin));
 				}
 				
 				cdata.moveToNext();
