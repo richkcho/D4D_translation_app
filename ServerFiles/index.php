@@ -2,6 +2,7 @@
 // Strings
 $conversationdata_conversationidlabel = 'ConversationID: ';
 $conversationdata_languagelabel = 'LanguageIDs: ';
+$conversationdata_categoryidlabel = 'CategoryID: ';
 $conversationdata_categorylabel = 'Category: ';
 $conversationdata_descriptionlabel = 'Description: ';
 $conversationdata_splitstring = "\n";
@@ -24,9 +25,11 @@ $statement_split = ' ';
 
 $arraylist_split = ', ';
 
+$nodata = 'NULL';
+
 // functions
 
-// complies to interface. expects supported_languages to be comma seperated integers
+// complies to interface. expects supported_languages to be comma separated integers
 function getConversationData($db, $category_id, $supported_languages)
 {
 	global $arraylist_split, 
@@ -34,7 +37,8 @@ function getConversationData($db, $category_id, $supported_languages)
 		$conversationdata_languagelabel,
 		$conversationdata_categorylabel, 
 		$conversationdata_descriptionlabel, 
-		$conversationdata_splitstring;
+		$conversationdata_splitstring,
+        $conversationdata_categoryidlabel;
 	// ensure category_id is integer
 	$category_id = (int)$category_id;
 	
@@ -61,6 +65,7 @@ function getConversationData($db, $category_id, $supported_languages)
 			// add the statement
 			$res .= '(' . $conversationdata_conversationidlabel . $result['conversation_id'] . $conversationdata_splitstring;
 			$res .= $conversationdata_languagelabel . $result['supported_languages'] . $conversationdata_splitstring;
+            $res .= $conversationdata_categoryidlabel . $result['category'] . $conversationdata_splitstring;
 			$res .= $conversationdata_categorylabel . getTranslationString($db, $result['category']) . $conversationdata_splitstring;
 			$res .= $conversationdata_descriptionlabel . getTranslationString($db, $result['description']) . ')';
 			
@@ -304,7 +309,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 							}
 							else
 							{
-								echo 'NULL';
+								echo $nodata;
 							}
 						}
 					}
@@ -321,7 +326,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 							}
 							else
 							{
-								echo 'NULL';
+								echo $nodata;
 							}
 						}
 					}
