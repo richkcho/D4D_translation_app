@@ -137,10 +137,11 @@ public class ServerDatabase implements ConversationDatabase{
 			String temp = "";
 			while((temp = read.readLine()) != null)
 			{
-				res += temp;
+				res += temp + "\n";
 			}
 			
 			// return null if no data was received, else return what we got
+			System.out.println(res);
 			return (res.equals(nodata) ? null : new ConversationTree(res));
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

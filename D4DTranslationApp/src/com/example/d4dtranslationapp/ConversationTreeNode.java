@@ -11,7 +11,7 @@ public class ConversationTreeNode {
 	public static final char post = ')';
 	
 	// string that separates the statement and children in toString
-	public static final String splitstring = ",";
+	public static final String splitstring = "::";
 	
 	private ArrayList<ConversationTreeNode> children;
 	private ConversationTreeNode parent;

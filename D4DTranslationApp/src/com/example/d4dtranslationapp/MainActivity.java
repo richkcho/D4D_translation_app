@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -71,12 +70,6 @@ public class MainActivity extends Activity {
 		*/
 		@Override
 		protected Void doInBackground(Void... params) {
-			
-			for(int temp = 0; temp < 999; temp++)
-			{
-				publishProgress();
-			}
-
 			if(db != null)
 			{
 				listvalues.add(getResources().getStringArray(R.array.all_translation_array)[userlang]);
@@ -90,6 +83,8 @@ public class MainActivity extends Activity {
 						listvalues.add(temp.getCategoryString(userlang));
 						catids.add(temp.getCategoryID());
 					}
+					
+					publishProgress();
 				}
 			}
 
@@ -117,7 +112,18 @@ public class MainActivity extends Activity {
 		// check first run, if so, route them to settings menu
 		checkFirstRun();
 		
-		db = new LocalDatabase(this);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		if(pref.getBoolean("use_local_db", true))
+		{
+			System.out.println("Using local database");
+			db = new LocalDatabase(this);
+		}
+		else
+		{
+			System.out.println("Using Server Database");
+			db = new ServerDatabase("http://140.247.71.162/D4D/");
+		}
 		
 		progress = new ProgressDialog(this);
 		progress.setMessage("Fetching Stuff");
@@ -125,7 +131,7 @@ public class MainActivity extends Activity {
 		progress.setIndeterminate(true);
 		
 		// "fetch" data
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		
 		System.out.println("User Language: " + pref.getString("user_language", "-1"));
 		System.out.println("Target Language: " + pref.getString("target_language", "-1"));
 		
@@ -157,6 +163,7 @@ public class MainActivity extends Activity {
                 int position, long id) {
 
                Intent intent = new Intent(MainActivity.this, ConversationDataListActivity.class); // provide intent context and class to deliver intent to
+               System.out.println("categories: " + catids);
                intent.putExtra(CATEGORY_ID, catids.get(position));
                startActivity(intent);
             

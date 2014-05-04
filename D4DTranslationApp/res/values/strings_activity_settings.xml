@@ -9,6 +9,7 @@
     <string name="pref_header_general">General</string>
     <string name="pref_title_user_language">Choose User Language</string>
     <string name="pref_title_target_language">Choose Target Language</string>
+    <string name="pref_title_use_local_db">Use Local Database</string>
 
     <string-array name="language_list_titles">
         <item>English</item>

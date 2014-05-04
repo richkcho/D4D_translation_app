@@ -31,8 +31,6 @@ public class LocalDatabase implements ConversationDatabase {
 				// prepare data
 				int[] supported_languages = strToIntArray(cdata.getString(cdata.getColumnIndex("supported_languages")));
 				
-				System.out.println("HURR");
-				
 				// if languages = null, accept anything. else make sure
 				if(supported_languagesin == null || existsArr(supported_languagesin, supported_languages))
 				{

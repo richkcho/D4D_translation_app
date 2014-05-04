@@ -3,23 +3,27 @@ package com.example.d4dtranslationapp;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class ConversationDataListActivity extends Activity {
+	
+	public final static String CONVERSATION = "com.example.d4dtranslationapp.CONV";
 
 	// variables for load and output of conversation data
 	ListView listView;
 	protected ProgressDialog progress;
 	protected ArrayList<String> values = new ArrayList<String>();
+	protected ArrayList<Conversation> conversations = new ArrayList<Conversation>();
 	protected ArrayAdapter<String> adapter;
 	protected ConversationDatabase db;
 
@@ -27,25 +31,26 @@ public class ConversationDataListActivity extends Activity {
 	private class GetDataTask extends AsyncTask<Void, Void, Void> 
 	{
 		int userlang;
+		int targetlang;
 		int[] cparams;
 		int catid;
 
 		public GetDataTask(String userlangin, String lang2, int catidin)
 		{
 			userlang = Integer.parseInt(userlangin);
-			int temp = Integer.parseInt(lang2);
+			targetlang = Integer.parseInt(lang2);
 
 			/* Want to have them in increasing order i think. 
 			 * Might not be necessary as I think checks were used but I want to be sure. 
 			 * --few extra lines for safety--
 			 */
-			if(userlang < temp)
+			if(userlang < targetlang)
 			{
-				cparams = new int[]{userlang, temp};
+				cparams = new int[]{userlang, targetlang};
 			}
 			else
 			{
-				cparams = new int[]{temp, userlang};
+				cparams = new int[]{targetlang, userlang};
 			}
 			
 			catid = catidin;
@@ -69,20 +74,25 @@ public class ConversationDataListActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 
-			for(int temp = 0; temp < 999; temp++)
-			{
-				publishProgress();
-			}
-
 			if(db != null)
 			{
-				System.out.println(db.getConversationData(catid,cparams));
 				for(ConversationData temp : db.getConversationData(catid, cparams))
 				{
-					if(!values.contains(temp))
+					String stemp = temp.toString();
+					stemp = stemp.substring(stemp.indexOf("Description: ") + 13);
+					String[] descriptions = stemp.split(" / ");
+					
+					for(String s : descriptions)
 					{
-						values.add(temp.toString());
+						if(Integer.parseInt(s.substring(0,1)) == userlang)
+						{
+							values.add(s.substring(2));
+						}
 					}
+					
+					conversations.add(db.getConversation(temp.getConversationID(), cparams[0], cparams[1]));
+					
+					publishProgress();
 				}
 			}
 
@@ -107,7 +117,18 @@ public class ConversationDataListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		db = new LocalDatabase(this);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		if(pref.getBoolean("use_local_db", true))
+		{
+			System.out.println("Using local database");
+			db = new LocalDatabase(this);
+		}
+		else
+		{
+			System.out.println("Using Server Database");
+			db = new ServerDatabase("http://140.247.71.162/D4D/");
+		}
 
 		progress = new ProgressDialog(this);
 		progress.setMessage("Fetching Stuff");
@@ -115,16 +136,11 @@ public class ConversationDataListActivity extends Activity {
 		progress.setIndeterminate(true);
 
 		// "fetch" data
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		
 		Intent intent = getIntent();
 	    int catid = intent.getIntExtra(MainActivity.CATEGORY_ID, -1);
 	    System.out.println("Recieved Category ID: " + catid);
 
 		new GetDataTask(pref.getString("user_language", "1"), pref.getString("target_language", "2"), catid).execute(null, null, null);
-
-		System.out.println(values);
-		System.out.println(db.getConversation(1,1,2));
 
 		// Get ListView object from xml
 		listView = (ListView) findViewById(R.id.list);
@@ -141,6 +157,24 @@ public class ConversationDataListActivity extends Activity {
 
 		// Assign adapter to ListView
 		listView.setAdapter(adapter); 
+		
+		// Assign an onClick listener
+		 listView.setOnItemClickListener(new OnItemClickListener() {
+			 
+             @Override
+             public void onItemClick(AdapterView<?> parent, View view,
+                int position, long id) {
+
+               Intent intent = new Intent(ConversationDataListActivity.this, ConversationDisplayActivity.class); // provide intent context and class to deliver intent to
+               intent.putExtra(CONVERSATION, conversations.get(position).toString());
+               
+               System.out.println("Conversation Sent: " + conversations.get(position).toString());
+               
+               startActivity(intent);
+            
+             }
+
+        }); 
 	}
 
 	@Override

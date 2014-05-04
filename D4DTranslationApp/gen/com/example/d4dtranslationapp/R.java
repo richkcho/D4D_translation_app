@@ -29,34 +29,39 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0002;
-        public static final int list=0x7f0a0001;
-        public static final int textView1=0x7f0a0000;
+        public static final int action_settings=0x7f0a0003;
+        public static final int buttonTable=0x7f0a0000;
+        public static final int list=0x7f0a0002;
+        public static final int textView1=0x7f0a0001;
     }
     public static final class layout {
         public static final int activity_conversation_data_list=0x7f030000;
-        public static final int activity_loading_screen=0x7f030001;
-        public static final int activity_main=0x7f030002;
+        public static final int activity_conversation_display=0x7f030001;
+        public static final int activity_loading_screen=0x7f030002;
+        public static final int activity_main=0x7f030003;
     }
     public static final class menu {
         public static final int conversation_data_list=0x7f090000;
-        public static final int loading_screeen=0x7f090001;
-        public static final int loading_screen=0x7f090002;
-        public static final int main=0x7f090003;
+        public static final int conversation_display=0x7f090001;
+        public static final int loading_screeen=0x7f090002;
+        public static final int loading_screen=0x7f090003;
+        public static final int main=0x7f090004;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int hello_world=0x7f060002;
+        public static final int download=0x7f060002;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f060006;
-        public static final int pref_title_target_language=0x7f060008;
-        public static final int pref_title_user_language=0x7f060007;
+        public static final int pref_header_general=0x7f060007;
+        public static final int pref_title_target_language=0x7f060009;
+        public static final int pref_title_use_local_db=0x7f06000a;
+        public static final int pref_title_user_language=0x7f060008;
         public static final int title_activity_conversation_data_list=0x7f060004;
+        public static final int title_activity_conversation_display=0x7f060005;
         public static final int title_activity_loading_screen=0x7f060003;
-        public static final int title_activity_settings=0x7f060005;
+        public static final int title_activity_settings=0x7f060006;
     }
     public static final class style {
         /** 

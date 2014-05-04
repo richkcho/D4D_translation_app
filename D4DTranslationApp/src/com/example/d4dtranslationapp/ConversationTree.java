@@ -1,5 +1,6 @@
 package com.example.d4dtranslationapp;
 
+
 import java.util.*;
 
 public class ConversationTree implements Conversation {
@@ -22,6 +23,7 @@ public class ConversationTree implements Conversation {
 	public ConversationTree(String conversationstring)
 	{
 		String[] params = conversationstring.split(splitstring);
+		
 		languages = strArrToIntArr(params[0].substring(params[0].indexOf(languagelabel)+languagelabel.length()).split(languagesplit));
 		root = new ConversationTreeNode(params[1].substring(params[1].indexOf(conversationlabel)+conversationlabel.length()));
 	}

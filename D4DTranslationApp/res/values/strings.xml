@@ -3,15 +3,17 @@
 
     <string name="app_name">D4D Translation App</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="download">Download</string>
     <string name="title_activity_loading_screen">LoadingScreenActivity</string>
     <string name="title_activity_conversation_data_list">ConversationDataListActivity</string>
-    
+
     <string-array name="all_translation_array">
         <item>Null</item>
         <item>All</item>
         <item>Todos</item>
         <item>Tout</item>
     </string-array>
+
+    <string name="title_activity_conversation_display">ConversationDisplayActivity</string>
 
 </resources>

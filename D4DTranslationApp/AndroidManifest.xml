@@ -36,10 +36,19 @@
         <activity
             android:name="com.example.d4dtranslationapp.ConversationDataListActivity"
             android:label="@string/title_activity_conversation_data_list"
-            android:parentActivityName="com.example.d4dtranslationapp.MainActivity" >
+            android:parentActivityName="com.example.d4dtranslationapp.MainActivity"
+            android:launchMode="singleTop" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.d4dtranslationapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.example.d4dtranslationapp.ConversationDisplayActivity"
+            android:label="@string/title_activity_conversation_display"
+            android:parentActivityName="com.example.d4dtranslationapp.ConversationDataListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.d4dtranslationapp.ConversationDataListActivity" />
         </activity>
     </application>
 

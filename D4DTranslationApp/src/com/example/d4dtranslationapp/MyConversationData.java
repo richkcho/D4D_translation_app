@@ -50,9 +50,11 @@ public class MyConversationData implements ConversationData{
 	{
 		String[] params = conversationdata.substring(1, conversationdata.length()-1).split(splitstring);
 		
+		System.out.println("WOLOLOLOL: " + params[2]);
+		
 		conversation_id  = Integer.parseInt(trimLabel(params[0], conversationidlabel));
 		supported_languages = strArrToIntArr(trimLabel(params[1], languagelabel).split(languagesplit));
-		conversation_id = Integer.parseInt(trimLabel(params[2], categoryidlabel));
+		category_id = Integer.parseInt(trimLabel(params[2], categoryidlabel));
 		category = strToStatementArray(trimLabel(params[3], categorylabel));
 		description = strToStatementArray(trimLabel(params[4], descriptionlabel));
 	}
