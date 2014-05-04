@@ -127,7 +127,7 @@ public class ConversationDataListActivity extends Activity {
 		else
 		{
 			System.out.println("Using Server Database");
-			db = new ServerDatabase("http://140.247.71.162/D4D/");
+			db = new ServerDatabase(MainActivity.SERVER_URL);
 		}
 
 		progress = new ProgressDialog(this);

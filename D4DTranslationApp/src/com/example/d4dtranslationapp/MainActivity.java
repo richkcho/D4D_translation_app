@@ -20,6 +20,8 @@ public class MainActivity extends Activity {
 	
 	public final static String CATEGORY_ID = "com.example.d4dtranslationapp.CATID";
 	
+	public final static String SERVER_URL = "http://140.247.71.162/D4D/";
+	
 	// variables for load and output of conversation data
 	protected ListView listView;
 	protected ProgressDialog progress;
@@ -122,7 +124,7 @@ public class MainActivity extends Activity {
 		else
 		{
 			System.out.println("Using Server Database");
-			db = new ServerDatabase("http://140.247.71.162/D4D/");
+			db = new ServerDatabase(SERVER_URL);
 		}
 		
 		progress = new ProgressDialog(this);
